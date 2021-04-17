@@ -38,3 +38,29 @@ public:
 	}
 };
 -----------------------------------------------------------------
+class Solution {
+public:
+	vector<vector<int>> generateMatrix(int n) {
+		//定义用来写矩阵的容器
+		vector<vector<int>> res(n, vector<int>(n, 0));
+		int x = 0, y = 0; // 定义每循环一个圈的起始位置
+		int count = 1; // 用来给矩阵中每一个空格赋值
+		int loop = n / 2, mid = n / 2; // 每个圈循环几次，例如n为奇数3，那么loop = 1 只是循环一圈，矩阵中间的值需要单独处理
+		int offset = 1;  // 每一圈循环，需要控制每一条边遍历的长度
+		while (loop--) { //给的循环数
+			int i = x; 
+			int j = y;
+			
+			for (; j < n - offset + x; j++)  res[i][j] = count++;// →	
+			for (; i < n - offset + y; i++)  res[i][j] = count++;// ↓		
+			for (; j > y; j--) res[i][j] = count++;  //←
+			for (; i > x; i--) res[i][j] = count++;  //↑
+			x++;
+			y++;
+			offset += 2;
+		}
+		if (n % 2 == 1)  res[mid][mid] = count;
+		return res;
+	}
+};
+----------------------------end----------------------------------------------------
