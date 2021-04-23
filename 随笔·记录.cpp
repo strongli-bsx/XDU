@@ -1,0 +1,66 @@
+-------------------------4-17---------------------------------------------
+class Solution {
+public:
+	int searchInsert(vector<int>& nums, int target) {
+		int left = 0, right = nums.size() - 1;
+		//找到最后，left 一定是 等于right的，且left一定是向右走，right向左走
+		//当不满足条件的时候，right < left, 代表没有找到该元素
+		//插入的位置，也就是 right + 1
+		while (left <= right) {
+			int index = (left + right) >> 1;
+			if (nums[index] == target)	return index;
+			if (nums[index] > target)  right = index - 1;
+			if (nums[index] < target)  left = index + 1;
+		}
+		return right + 1;
+	}
+};
+
+------------------------------------------------------------------------
+class Solution{
+public:
+	int minSubArrayLen(int s, vector<int>& nums) {
+		int res = INT_MAX;
+		int n = nums.size();
+		int sum = 0;
+		//复习滑动窗口，前两天刚刚写过，今天写了双指针，就不会写了
+		//窗口是循环，两层循环，先是右侧循环，当右侧到达临界点后，
+		//左侧进入循环，到达临界点，右侧继续循环，以此往复
+		for (int left = 0, right = 0; right < n; right++) {
+			sum +=  nums[right];
+			for (; sum >= s; left++) {
+				sum -= nums[left];
+				res = min(res, right - left + 1);
+	
+			}
+		}
+		return res == INT_MAX ? 0 : res;
+	}
+};
+-----------------------------------------------------------------
+class Solution {
+public:
+	vector<vector<int>> generateMatrix(int n) {
+		//定义用来写矩阵的容器
+		vector<vector<int>> res(n, vector<int>(n, 0));
+		int x = 0, y = 0; // 定义每循环一个圈的起始位置
+		int count = 1; // 用来给矩阵中每一个空格赋值
+		int loop = n / 2, mid = n / 2; // 每个圈循环几次，例如n为奇数3，那么loop = 1 只是循环一圈，矩阵中间的值需要单独处理
+		int offset = 1;  // 每一圈循环，需要控制每一条边遍历的长度
+		while (loop--) { //给的循环数
+			int i = x; 
+			int j = y;
+			
+			for (; j < n - offset + x; j++)  res[i][j] = count++;// →	
+			for (; i < n - offset + y; i++)  res[i][j] = count++;// ↓		
+			for (; j > y; j--) res[i][j] = count++;  //←
+			for (; i > x; i--) res[i][j] = count++;  //↑
+			x++;
+			y++;
+			offset += 2;
+		}
+		if (n % 2 == 1)  res[mid][mid] = count;
+		return res;
+	}
+};
+----------------------------end----------------------------------------------------
